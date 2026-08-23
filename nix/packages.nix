@@ -13,10 +13,6 @@
   # Tools
   pkgs.fish
   pkgs.fastfetch
-  pkgs.python3
-  pkgs.nodejs_22
-  pkgs.pnpm
-  pkgs.uv
   pkgs.stow
   pkgs.proton-pass-cli
   pkgs.opencode
@@ -29,7 +25,7 @@
   pkgs.kubernetes-helm
   (pkgs.lib.lowPrio pkgs.minikube)
 
-  # Less important packages
+  # Neovim less important packages
   pkgs.ast-grep
   pkgs.luarocks
   pkgs.imagemagick
