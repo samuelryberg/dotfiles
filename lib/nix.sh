@@ -90,10 +90,11 @@ uninstall_nix_home_manager() {
 
   echo "Uninstalling home-manager..."
 
+  echo "Home Manager cannot be uninstalled in non-interactive mode please run the following command to uninstall:"
   if command -v home-manager &>/dev/null; then
-    home-manager uninstall
+    echo "home-manager uninstall"
   else
-    nix run home-manager/master -- uninstall
+    echo "nix run home-manager/master -- uninstall"
   fi
 }
 

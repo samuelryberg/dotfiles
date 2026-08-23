@@ -57,8 +57,6 @@ _setup_dotfiles() {
   check_stow
 
   echo "Stowing to $TARGET_DIR"
-  _stow_selections "$PACKAGES" -n -v ${UNINSTALL:+-D}
-
   _stow_selections "$PACKAGES" -v ${UNINSTALL:+-D}
   echo "Stow succeeded"
 }
