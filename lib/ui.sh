@@ -65,6 +65,21 @@ select_brew() {
   BREW_CHOICE=$(run_gum confirm "Homebrew is required. Install it?" && echo "yes" || echo "no")
 }
 
+select_nix_home_manager() {
+  if ! command -v nix &>/dev/null && [[ "$NIX_CHOICE" != "yes" ]]; then
+    echo "Skipping nix home manager (nix not installed)"
+    NIX_HM_CHOICE="no"
+    return
+  fi
+
+  if [[ -n "${UNINSTALL:-}" ]]; then
+    NIX_HM_CHOICE="yes"
+    return
+  fi
+
+  NIX_HM_CHOICE=$(run_gum confirm "Do you want to run nix home manager?" && echo "yes" || echo "no")
+}
+
 select_nix_darwin() {
   if ! command -v nix &>/dev/null && [[ "$NIX_CHOICE" != "yes" ]]; then
     echo "Skipping nix-darwin (nix not installed)"
@@ -87,10 +102,12 @@ show_summary() {
     nix_label="Uninstall Nix"
     brew_label="Uninstall Homebrew"
     darwin_label="Uninstall nix-darwin"
+    home_manager_label="Uninstall nix home manager"
   else
     nix_label="Install Nix"
     brew_label="Install Homebrew"
     darwin_label="Setup nix-darwin"
+    home_manager_label="Setup nix home manager"
   fi
 
   run_gum style --foreground 212 --border-foreground 212 --border double --align left --width 50 --margin "1 2" --padding "2 4" \
@@ -99,6 +116,7 @@ show_summary() {
     "Jobs: $JOBS" \
     "$nix_label: ${NIX_CHOICE:-no}" \
     "$brew_label: ${BREW_CHOICE:-no}" \
+    "$home_manager_label: ${NIX_HM_CHOICE:-no}" \
     "$darwin_label: ${NIX_DARWIN_CHOICE:-no}" \
     "Packages: ${PACKAGES:-none}" \
     "" \

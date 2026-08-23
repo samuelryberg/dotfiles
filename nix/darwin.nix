@@ -1,5 +1,21 @@
 { pkgs, ... }:
 {
+  nixpkgs.config.allowUnfree = true;
+
+  programs = {
+    bash.enable = true;
+    zsh.enable = true;
+    fish.enable = true;
+  };
+
+  environment.shells = [ pkgs.fish ];
+
+  nix.settings.experimental-features = "nix-command flakes";
+
+  environment.systemPackages = import ./packages.nix { inherit pkgs; } ++ [
+    pkgs.utm
+  ];
+
   homebrew = {
     enable = true;
 
@@ -54,10 +70,6 @@
     configurationRevision = null;
     stateVersion = 6;
   };
-
-  environment.systemPackages = [
-    pkgs.utm
-  ];
 
   nixpkgs.hostPlatform = "aarch64-darwin";
 }

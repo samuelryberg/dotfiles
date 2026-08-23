@@ -16,6 +16,11 @@ install_gum() {
   os="$OS" || exit 1
   arch="$ARCH" || exit 1
 
+  case "$arch" in
+  aarch64) arch="arm64" ;;
+  amd64) arch="x86_64" ;;
+  esac
+
   version="0.16.0"
 
   archive="gum_${version}_${os}_${arch}.tar.gz"

@@ -25,7 +25,13 @@ _setup_pkg_manager() {
   install_nix
   setup_nix
 
-  if [[ "$OS" == "Darwin" ]]; then
+  if [[ "$OS" == "Linux" ]]; then
+    if [[ -n "${UNINSTALL:-}" ]]; then
+      uninstall_nix_home_manager
+    else
+      setup_nix_home_manager
+    fi
+  elif [[ "$OS" == "Darwin" ]]; then
     install_brew
     setup_brew
 
@@ -51,8 +57,6 @@ _setup_dotfiles() {
   check_stow
 
   echo "Stowing to $TARGET_DIR"
-  _stow_selections "$PACKAGES" -n -v ${UNINSTALL:+-D}
-
   _stow_selections "$PACKAGES" -v ${UNINSTALL:+-D}
   echo "Stow succeeded"
 }
@@ -84,7 +88,9 @@ else
 
   if [[ "$JOBS" == *"pkg_manager"* ]]; then
     select_nix
-    if [[ "$OS" == "Darwin" ]]; then
+    if [[ "$OS" == "Linux" ]]; then
+      select_nix_home_manager
+    elif [[ "$OS" == "Darwin" ]]; then
       select_brew
       select_nix_darwin
     fi
@@ -117,7 +123,7 @@ while IFS= read -r job; do
   if echo "$JOBS" | grep -q "^${job}$"; then
     case "$job" in
     pkg_manager) _setup_pkg_manager ;;
-    dotfiles)    _setup_dotfiles ;;
+    dotfiles) _setup_dotfiles ;;
     esac
   fi
 done <<<"$JOB_ORDER"
