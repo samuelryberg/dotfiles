@@ -26,7 +26,11 @@ _setup_pkg_manager() {
   setup_nix
 
   if [[ "$OS" == "Linux" ]]; then
-    setup_nix_home_manager
+    if [[ -n "${UNINSTALL:-}" ]]; then
+      uninstall_nix_home_manager
+    else
+      setup_nix_home_manager
+    fi
   elif [[ "$OS" == "Darwin" ]]; then
     install_brew
     setup_brew

@@ -80,6 +80,23 @@ setup_nix_home_manager() {
   fi
 }
 
+uninstall_nix_home_manager() {
+  _require_nix || return
+
+  if ! command -v home-manager &>/dev/null; then
+    echo "home-manager not installed, skipping"
+    return
+  fi
+
+  echo "Uninstalling home-manager..."
+
+  if command -v home-manager &>/dev/null; then
+    home-manager uninstall
+  else
+    nix run home-manager/master -- uninstall
+  fi
+}
+
 setup_nix_darwin() {
   if [[ "$NIX_DARWIN_CHOICE" != "yes" ]]; then
     return
