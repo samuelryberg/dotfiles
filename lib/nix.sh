@@ -112,7 +112,7 @@ setup_nix_darwin() {
   if command -v darwin-rebuild &>/dev/null; then
     NIX_COMMAND=(darwin-rebuild)
   else
-    NIX_COMMAND=(nix run nix-darwin/master#darwin-rebuild --)
+    NIX_COMMAND=(nix --extra-experimental-features 'nix-command flakes' run nix-darwin/master#darwin-rebuild --)
   fi
 
   if [[ -f "$FLAKE_DIR/flake.nix" ]]; then
@@ -135,6 +135,6 @@ uninstall_nix_darwin() {
   if command -v darwin-uninstaller &>/dev/null; then
     sudo darwin-uninstaller
   else
-    sudo nix run nix-darwin#darwin-uninstaller
+    sudo nix --extra-experimental-features 'nix-command flakes' run nix-darwin#darwin-uninstaller
   fi
 }
