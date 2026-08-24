@@ -3,7 +3,7 @@
 set -euo pipefail
 
 DOTFILES_DIR="${DOTFILES_DIR:-$HOME/dotfiles}"
-REPO_URL="https://github.com/TheExeQ/dotfiles/tarball/main"
+REPO_URL="https://github.com/samuelryberg/dotfiles/tarball/main"
 
 # Colors and symbols
 RED='\033[0;31m'
