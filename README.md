@@ -5,13 +5,13 @@ Personal dotfiles managed with **GNU Stow** and **Nix**, with support for macOS 
 ## Quick Start
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/TheExeQ/dotfiles/main/scripts/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/samuelryberg/dotfiles/main/scripts/install.sh | bash
 ```
 
 For CI/automation, use the `--yes` flag to skip confirmations:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/TheExeQ/dotfiles/main/scripts/install.sh | bash -s -- --yes
+curl -fsSL https://raw.githubusercontent.com/samuelryberg/dotfiles/main/scripts/install.sh | bash -s -- --yes
 ```
 
 To install to a custom directory, set `DOTFILES_DIR`:
