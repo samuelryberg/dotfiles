@@ -20,7 +20,6 @@
   pkgs.ansible
   pkgs.opentofu
   pkgs.podman
-  pkgs.podman-compose
   pkgs.kubectl
   pkgs.kubernetes-helm
   (pkgs.lib.lowPrio pkgs.minikube)

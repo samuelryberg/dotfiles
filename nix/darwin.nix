@@ -29,6 +29,8 @@
       "brave-browser"
       "obsidian"
       "spotify"
+      "podman-desktop"
+      "localsend"
     ];
 
     onActivation = {

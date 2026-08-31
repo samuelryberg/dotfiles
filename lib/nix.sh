@@ -45,8 +45,9 @@ install_nix() {
 setup_nix() {
   _require_nix || return
 
-  local experimental_features
-  experimental_features=$(nix show-config 2>/dev/null | grep "^experimental-features" | awk -F' = ' '{print $2}' || true)
+  local experimental_features_line experimental_features
+  experimental_features_line=$(nix show-config 2>/dev/null | grep "^experimental-features" || true)
+  experimental_features="${experimental_features_line#* = }"
 
   if [[ "$experimental_features" == *"flakes"* && "$experimental_features" == *"nix-command"* ]]; then
     return
