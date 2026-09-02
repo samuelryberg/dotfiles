@@ -19,7 +19,7 @@
   pkgs.claude-code
   pkgs.ansible
   pkgs.opentofu
-  pkgs.podman
+  #pkgs.podman #using docker for use with sandboxes
   pkgs.kubectl
   pkgs.kubernetes-helm
   (pkgs.lib.lowPrio pkgs.minikube)

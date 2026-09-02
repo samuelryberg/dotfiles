@@ -14,13 +14,13 @@
 
   environment.systemPackages = import ./packages.nix { inherit pkgs; } ++ [
     pkgs.utm
+    pkgs.docker-sbx
   ];
 
   homebrew = {
     enable = true;
 
     brews = [
-      # Empty for now
     ];
 
     casks = [
@@ -29,7 +29,7 @@
       "brave-browser"
       "obsidian"
       "spotify"
-      "podman-desktop"
+      "docker-desktop"
       "localsend"
     ];
 
