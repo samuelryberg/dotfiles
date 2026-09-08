@@ -29,7 +29,6 @@
       "brave-browser"
       "obsidian"
       "spotify"
-      "docker-desktop"
       "localsend"
     ];
 

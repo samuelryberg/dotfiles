@@ -2,6 +2,8 @@
 [
   # Core packages
   pkgs.git
+  pkgs.git-filter-repo
+  pkgs.tmux
   pkgs.neovim
   pkgs.ripgrep
   pkgs.fd
@@ -19,7 +21,7 @@
   pkgs.claude-code
   pkgs.ansible
   pkgs.opentofu
-  #pkgs.podman #using docker for use with sandboxes
+  pkgs.podman
   pkgs.kubectl
   pkgs.kubernetes-helm
   (pkgs.lib.lowPrio pkgs.minikube)

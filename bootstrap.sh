@@ -19,6 +19,7 @@ source "./lib/stow.sh"
 
 source "./lib/nix.sh"
 source "./lib/brew.sh"
+source "./lib/tmux.sh"
 source "./lib/ui.sh"
 
 _setup_pkg_manager() {
@@ -59,6 +60,8 @@ _setup_dotfiles() {
   echo "Stowing to $TARGET_DIR"
   _stow_selections "$PACKAGES" -v ${UNINSTALL:+-D}
   echo "Stow succeeded"
+
+  install_tpm
 }
 
 bootstrap_parse_args "$@"
