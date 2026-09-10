@@ -17,6 +17,7 @@
   pkgs.fastfetch
   pkgs.stow
   pkgs.proton-pass-cli
+  pkgs.nodejs_24
   pkgs.opencode
   pkgs.claude-code
   pkgs.ansible
