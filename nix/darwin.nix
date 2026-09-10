@@ -29,7 +29,10 @@
       "brave-browser"
       "obsidian"
       "spotify"
+
+      #Tools
       "localsend"
+      "superwhisper"
     ];
 
     onActivation = {

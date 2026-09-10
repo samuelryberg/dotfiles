@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "defaultMode": "acceptEdits"
+  },
+  "effortLevel": "low",
+  "theme": "dark",
+  "editorMode": "vim",
+  "verbose": true
+}
