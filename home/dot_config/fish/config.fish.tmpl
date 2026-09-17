@@ -1,13 +1,24 @@
-# The following lines were added by Docker Desktop to add commands to your PATH.
-export PATH="$PATH:/Users/samuel/.docker/bin"
-# End of Docker Desktop section.
-
 if status is-interactive
+{{- if eq .chezmoi.os "darwin" }}
     # Homebrew
     if test -x /opt/homebrew/bin/brew
         eval (/opt/homebrew/bin/brew shellenv)
-    else if type -q brew
-        eval (brew shellenv)
+    else if test -x /usr/local/bin/brew
+        eval (/usr/local/bin/brew shellenv)
+    end
+
+    # Docker Desktop
+    if test -d $HOME/.docker/bin
+        fish_add_path $HOME/.docker/bin
+    end
+{{- end }}
+
+    # mise — version-managed developer CLIs
+    if test -x $HOME/.local/bin/mise
+        fish_add_path $HOME/.local/bin
+    end
+    if type -q mise
+        mise activate fish | source
     end
 
     # Proton Pass SSH agent
@@ -44,20 +55,15 @@ if status is-interactive
     alias kgs='kubectl get svc'
     alias kgd='kubectl get deployments'
 
-    # Describe
-    alias kdp='kubectl describe pod'
-    alias kdn='kubectl describe node'
-
     # -- Terraform/OpenTofu --
-    set tf tofu
-    alias tf='$tf'
-    alias tfi='$tf init'
-    alias tfp='$tf plan'
-    alias tfa='$tf apply'
-    alias tfd='$tf destroy'
-    alias tfo='$tf output'
-    alias tfs='$tf show'
-    alias tfv='$tf validate'
+    alias tf='tofu'
+    alias tfi='tofu init'
+    alias tfp='tofu plan'
+    alias tfa='tofu apply'
+    alias tfd='tofu destroy'
+    alias tfo='tofu output'
+    alias tfs='tofu show'
+    alias tfv='tofu validate'
 
     # Fastfetch
     if type -q fastfetch

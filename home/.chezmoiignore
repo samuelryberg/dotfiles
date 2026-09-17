@@ -1,0 +1,5 @@
+.DS_Store
+
+# fish rewrites this on every settings change; colors come from
+# conf.d/fish_frozen_theme.fish instead.
+.config/fish/fish_variables

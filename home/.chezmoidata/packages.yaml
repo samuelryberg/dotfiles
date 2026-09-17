@@ -1,0 +1,85 @@
+# Single source of truth for OS-level packages.
+#
+# Anything that is a shell, a GUI app, or needs system integration lives here.
+# Version-managed developer CLIs live in dot_config/mise/config.toml instead,
+# so they resolve to identical versions on every machine.
+#
+# Editing this file re-triggers .chezmoiscripts/run_onchange_before_10-packages.sh.tmpl
+
+packages:
+  darwin:
+    formulae:
+      - chezmoi
+      - mise
+      - fish
+      - tmux
+      - neovim
+      - git
+      - git-filter-repo
+      - fastfetch
+      - podman
+      - ansible
+      - luarocks
+      - imagemagick
+      - ghostscript
+      - tectonic
+    casks:
+      - ghostty
+      - zen
+      - brave-browser
+      - obsidian
+      - spotify
+      - localsend
+      - superwhisper
+      - proton-pass
+      - utm
+      - docker
+
+  linux:
+    # Package names differ per distro; each manager gets its own list.
+    apt:
+      - fish
+      - tmux
+      - neovim
+      - git
+      - git-filter-repo
+      - fastfetch
+      - podman
+      - ansible
+      - luarocks
+      - imagemagick
+      - ghostscript
+      - curl
+      - unzip
+      - build-essential
+    dnf:
+      - fish
+      - tmux
+      - neovim
+      - git
+      - git-filter-repo
+      - fastfetch
+      - podman
+      - ansible
+      - luarocks
+      - ImageMagick
+      - ghostscript
+      - tectonic
+      - curl
+      - unzip
+    pacman:
+      - fish
+      - tmux
+      - neovim
+      - git
+      - git-filter-repo
+      - fastfetch
+      - podman
+      - ansible
+      - luarocks
+      - imagemagick
+      - ghostscript
+      - tectonic
+      - curl
+      - unzip
+      - base-devel

@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# tmux plugin manager — .tmux.conf expects it at ~/.tmux/plugins/tpm.
+#
+# tmux.conf hash: {{ include "dot_tmux.conf" | sha256sum }}
+set -euo pipefail
+
+TPM_DIR="$HOME/.tmux/plugins/tpm"
+
+if ! command -v git >/dev/null 2>&1; then
+  echo "git not found; skipping TPM install." >&2
+  exit 0
+fi
+
+if [[ -d "$TPM_DIR/.git" ]]; then
+  git -C "$TPM_DIR" pull --quiet --ff-only || true
+else
+  echo "==> Installing TPM"
+  git clone --quiet --depth 1 https://github.com/tmux-plugins/tpm "$TPM_DIR"
+fi

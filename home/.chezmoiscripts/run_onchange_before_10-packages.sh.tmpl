@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+# Install OS-level packages. Re-runs whenever .chezmoidata/packages.yaml changes.
+set -euo pipefail
+
+{{- if eq .chezmoi.os "darwin" }}
+
+if ! command -v brew >/dev/null 2>&1; then
+  echo "==> Installing Homebrew"
+  NONINTERACTIVE=1 /bin/bash -c \
+    "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+fi
+
+for prefix in /opt/homebrew /usr/local; do
+  if [[ -x "$prefix/bin/brew" ]]; then
+    eval "$("$prefix/bin/brew" shellenv)"
+    break
+  fi
+done
+
+echo "==> Installing packages with brew bundle"
+brew bundle --file=- <<'BREWFILE'
+{{ range .packages.darwin.formulae -}}
+brew "{{ . }}"
+{{ end -}}
+{{ range .packages.darwin.casks -}}
+cask "{{ . }}"
+{{ end -}}
+BREWFILE
+
+{{- else if eq .chezmoi.os "linux" }}
+
+# Package availability varies by distro release, so install one at a time and
+# report what was missing rather than aborting the whole run.
+missing=()
+
+install_each() {
+  local pkg
+  for pkg in "$@"; do
+    if ! "${INSTALL_CMD[@]}" "$pkg" >/dev/null 2>&1; then
+      missing+=("$pkg")
+    fi
+  done
+}
+
+if command -v apt-get >/dev/null 2>&1; then
+  echo "==> Installing packages with apt"
+  sudo apt-get update -qq
+  INSTALL_CMD=(sudo apt-get install -y)
+  install_each {{ .packages.linux.apt | join " " }}
+elif command -v dnf >/dev/null 2>&1; then
+  echo "==> Installing packages with dnf"
+  INSTALL_CMD=(sudo dnf install -y)
+  install_each {{ .packages.linux.dnf | join " " }}
+elif command -v pacman >/dev/null 2>&1; then
+  echo "==> Installing packages with pacman"
+  INSTALL_CMD=(sudo pacman -S --needed --noconfirm)
+  sudo pacman -Sy --noconfirm >/dev/null
+  install_each {{ .packages.linux.pacman | join " " }}
+else
+  echo "No supported package manager found (apt/dnf/pacman)." >&2
+  echo "Install these manually: {{ .packages.linux.apt | join " " }}" >&2
+  exit 1
+fi
+
+if [[ ${#missing[@]} -gt 0 ]]; then
+  echo "==> Not available from this distro's repos: ${missing[*]}"
+  echo "    Install them manually if you need them."
+fi
+
+if ! command -v mise >/dev/null 2>&1 && [[ ! -x "$HOME/.local/bin/mise" ]]; then
+  echo "==> Installing mise"
+  curl -fsSL https://mise.run | sh
+fi
+
+{{- end }}

@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# Install the developer CLIs pinned in ~/.config/mise/config.toml.
+# Re-runs whenever that file changes.
+#
+# mise config hash: {{ include "dot_config/mise/config.toml" | sha256sum }}
+set -euo pipefail
+
+if ! command -v mise >/dev/null 2>&1; then
+  for candidate in "$HOME/.local/bin/mise" /opt/homebrew/bin/mise /usr/local/bin/mise; do
+    if [[ -x "$candidate" ]]; then
+      export PATH="$(dirname "$candidate"):$PATH"
+      break
+    fi
+  done
+fi
+
+if ! command -v mise >/dev/null 2>&1; then
+  echo "mise not found on PATH; skipping tool install." >&2
+  exit 0
+fi
+
+echo "==> Installing mise tools"
+mise trust --quiet "$HOME/.config/mise/config.toml"
+mise install --yes

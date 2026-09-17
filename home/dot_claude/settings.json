@@ -1,8 +1,10 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "permissions": {
-    "defaultMode": "acceptEdits",
-    "allow": ["WebFetch", "WebSearch"],
+    "allow": [
+      "WebFetch",
+      "WebSearch"
+    ],
     "deny": [
       "Bash(git commit *)",
       "Bash(git push *)",
@@ -12,12 +14,12 @@
       "Bash(sudo *)",
       "Read(./.env)",
       "Read(~/.ssh/**)"
-    ]
+    ],
+    "defaultMode": "acceptEdits"
   },
-  "effortLevel": "low",
-  "theme": "dark",
-  "editorMode": "vim",
-  "verbose": true,
+  "enabledPlugins": {
+    "frontend-design@claude-plugins-official": true
+  },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {
       "source": {
@@ -26,7 +28,9 @@
       }
     }
   },
-  "enabledPlugins": {
-    "frontend-design@claude-plugins-official": true
-  }
+  "effortLevel": "medium",
+  "theme": "dark",
+  "editorMode": "vim",
+  "verbose": true,
+  "model": "opus"
 }

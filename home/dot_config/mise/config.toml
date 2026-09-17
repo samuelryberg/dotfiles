@@ -1,0 +1,37 @@
+# Version-managed developer CLIs — identical versions on macOS and Linux.
+#
+# OS-level packages (shells, GUI apps, system integration) live in
+# .chezmoidata/packages.yaml instead.
+#
+# Editing this file re-triggers .chezmoiscripts/run_onchange_after_20-mise.sh.tmpl
+
+[tools]
+node = "24"
+
+# Search / navigation
+ripgrep = "latest"
+fd = "latest"
+fzf = "latest"
+ast-grep = "latest"
+
+# Git
+lazygit = "latest"
+
+# Infrastructure
+opentofu = "latest"
+kubectl = "latest"
+helm = "latest"
+minikube = "latest"
+
+# Node-based tooling
+"npm:opencode-ai" = "latest"
+"npm:@anthropic-ai/claude-code" = "latest"
+"npm:@mermaid-js/mermaid-cli" = "latest"
+
+# NOTE: proton-pass-cli has no first-party cross-platform distribution.
+# On macOS the `proton-pass` cask provides the SSH agent that
+# config.fish points SSH_AUTH_SOCK at. See README for the Linux story.
+
+[settings]
+# Trust this config without a separate `mise trust` step.
+idiomatic_version_file_enable_tools = []

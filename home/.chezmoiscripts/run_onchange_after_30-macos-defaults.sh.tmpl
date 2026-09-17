@@ -1,0 +1,66 @@
+{{- if eq .chezmoi.os "darwin" -}}
+#!/usr/bin/env bash
+# macOS system preferences — the replacement for nix-darwin's `system.defaults`.
+# `defaults write` is idempotent, so this re-runs safely whenever it changes.
+set -euo pipefail
+
+echo "==> Applying macOS defaults"
+
+# Dock
+defaults write com.apple.dock autohide -bool true
+defaults write com.apple.dock show-recents -bool false
+defaults write com.apple.dock minimize-to-application -bool true
+defaults write com.apple.dock persistent-apps -array
+
+# Finder
+defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+defaults write com.apple.finder AppleShowAllFiles -bool true
+defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
+defaults write com.apple.finder ShowPathbar -bool true
+
+# Control Center
+defaults write com.apple.controlcenter BatteryShowPercentage -bool true
+
+# Appearance
+defaults write NSGlobalDomain AppleIconAppearanceTheme -string "ClearDark"
+
+killall Dock >/dev/null 2>&1 || true
+killall Finder >/dev/null 2>&1 || true
+
+# Caps Lock -> Escape.
+#
+# nix-darwin did this with a launchd job because `hidutil` remaps do not
+# survive a reboot. Same trick here: apply now, and re-apply at each login.
+CAPS_LOCK=0x700000039
+ESCAPE=0x700000029
+MAPPING="{\"UserKeyMapping\":[{\"HIDKeyboardModifierMappingSrc\":${CAPS_LOCK},\"HIDKeyboardModifierMappingDst\":${ESCAPE}}]}"
+
+hidutil property --set "$MAPPING" >/dev/null
+
+AGENT_DIR="$HOME/Library/LaunchAgents"
+AGENT_PLIST="$AGENT_DIR/local.keyremap.plist"
+mkdir -p "$AGENT_DIR"
+
+cat >"$AGENT_PLIST" <<PLIST
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>local.keyremap</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/usr/bin/hidutil</string>
+    <string>property</string>
+    <string>--set</string>
+    <string>${MAPPING}</string>
+  </array>
+  <key>RunAtLoad</key>
+  <true/>
+</dict>
+</plist>
+PLIST
+
+launchctl bootout "gui/$(id -u)/local.keyremap" >/dev/null 2>&1 || true
+launchctl bootstrap "gui/$(id -u)" "$AGENT_PLIST" >/dev/null 2>&1 || true
+{{- end }}

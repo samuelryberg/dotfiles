@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# Make fish the login shell (nix-darwin did this via `environment.shells`).
+set -euo pipefail
+
+FISH="$(command -v fish || true)"
+
+if [[ -z "$FISH" ]]; then
+  echo "fish not found; skipping default-shell change." >&2
+  exit 0
+fi
+
+if [[ "${SHELL:-}" == "$FISH" ]]; then
+  exit 0
+fi
+
+if ! grep -qxF "$FISH" /etc/shells 2>/dev/null; then
+  echo "==> Registering $FISH in /etc/shells (needs sudo)"
+  echo "$FISH" | sudo tee -a /etc/shells >/dev/null
+fi
+
+echo "==> Setting fish as the default shell"
+chsh -s "$FISH" || echo "chsh failed; run 'chsh -s $FISH' manually." >&2
