@@ -18,9 +18,8 @@
   pkgs.stow
   pkgs.proton-pass-cli
   pkgs.nodejs_24
-  pkgs.opencode
-  pkgs.claude-code
   pkgs.ansible
+  pkgs.opencode
   pkgs.opentofu
   pkgs.podman
   pkgs.kubectl

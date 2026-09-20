@@ -15,7 +15,7 @@ stow_pkg() {
   local flags=("$@")
 
   if [ -d "$STOW_DIR/$pkg" ]; then
-    stow "${flags[@]}" -d "$STOW_DIR" -t "$TARGET_DIR" "$pkg"
+    stow "${flags[@]}" --no-folding -d "$STOW_DIR" -t "$TARGET_DIR" "$pkg"
   else
     echo "Skipping missing package: $pkg"
   fi
