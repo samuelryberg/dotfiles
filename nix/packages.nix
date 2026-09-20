@@ -19,7 +19,6 @@
   pkgs.proton-pass-cli
   pkgs.nodejs_24
   pkgs.ansible
-  pkgs.opencode
   pkgs.opentofu
   pkgs.podman
   pkgs.kubectl

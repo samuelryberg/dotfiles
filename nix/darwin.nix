@@ -20,7 +20,12 @@
   homebrew = {
     enable = true;
 
+    taps = [
+      "anomalyco/tap"
+    ];
+
     brews = [
+      "opencode-v2"
     ];
 
     casks = [
