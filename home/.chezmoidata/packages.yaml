@@ -1,0 +1,14 @@
+packages:
+  darwin:
+    brews:
+      - fish
+      - git
+      - neovim
+      - tmux
+    casks: []
+  linux:
+    apt:
+      - fish
+      - git
+      - neovim
+      - tmux

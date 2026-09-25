@@ -1,0 +1,31 @@
+{{ if eq .chezmoi.os "linux" -}}
+{{   if or (eq .chezmoi.osRelease.id "ubuntu") (eq .chezmoi.osRelease.id "debian") -}}
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+packages=(
+{{ range .packages.linux.apt -}}
+  {{ . | quote }}
+{{ end -}}
+)
+
+missing_packages=()
+
+for package in "${packages[@]}"; do
+  if ! dpkg-query --show --showformat='${Status}' "$package" 2>/dev/null \
+    | grep -qx 'install ok installed'; then
+    missing_packages+=("$package")
+  fi
+done
+
+if ((${#missing_packages[@]} == 0)); then
+  echo "All APT packages are already installed."
+  exit 0
+fi
+
+echo "Installing missing APT packages: ${missing_packages[*]}"
+sudo apt-get update
+sudo apt-get install --yes "${missing_packages[@]}"
+{{   end -}}
+{{ end -}}
