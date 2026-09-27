@@ -1,0 +1,28 @@
+{{ if eq .chezmoi.os "darwin" -}}
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# Dock
+defaults write com.apple.dock autohide -bool true
+defaults write com.apple.dock show-recents -bool false
+defaults write com.apple.dock minimize-to-application -bool true
+defaults write com.apple.dock persistent-apps -array
+
+# Finder
+defaults write com.apple.finder AppleShowAllExtensions -bool true
+defaults write com.apple.finder AppleShowAllFiles -bool true
+defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
+defaults write com.apple.finder ShowPathbar -bool true
+
+# Control Center
+defaults write "$HOME/Library/Preferences/ByHost/com.apple.controlcenter" \
+  BatteryShowPercentage -bool true
+
+# Global appearance
+defaults write -g AppleIconAppearanceTheme -string "ClearDark"
+
+for process in Dock Finder ControlCenter SystemUIServer; do
+  killall "$process" 2>/dev/null || true
+done
+{{ end -}}
