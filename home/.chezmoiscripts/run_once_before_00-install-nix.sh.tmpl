@@ -1,0 +1,33 @@
+{{ if or (eq .chezmoi.os "darwin") (eq .chezmoi.os "linux") -}}
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+if command -v nix >/dev/null 2>&1 \
+  || [[ -x /nix/var/nix/profiles/default/bin/nix ]] \
+  || [[ -x "$HOME/.nix-profile/bin/nix" ]]; then
+  echo "Nix is already installed."
+  exit 0
+fi
+
+if ! command -v curl >/dev/null 2>&1; then
+  echo "curl is required to install Nix." >&2
+  exit 1
+fi
+
+if ! read -r -p "Nix is not installed. Install it now? [y/N] " response </dev/tty; then
+  echo "Interactive confirmation is required to install Nix." >&2
+  exit 1
+fi
+
+case "$response" in
+  [yY]|[yY][eE][sS]) ;;
+  *)
+    echo "Nix installation cancelled." >&2
+    exit 1
+    ;;
+esac
+
+echo "Installing Nix."
+curl --proto '=https' --tlsv1.2 -L https://nixos.org/nix/install | sh
+{{ end -}}

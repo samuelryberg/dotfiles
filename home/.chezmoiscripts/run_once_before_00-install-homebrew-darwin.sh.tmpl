@@ -10,6 +10,19 @@ if command -v brew >/dev/null 2>&1 \
   exit 0
 fi
 
+if ! read -r -p "Homebrew is not installed. Install it now? [y/N] " response </dev/tty; then
+  echo "Interactive confirmation is required to install Homebrew." >&2
+  exit 1
+fi
+
+case "$response" in
+  [yY]|[yY][eE][sS]) ;;
+  *)
+    echo "Homebrew installation cancelled." >&2
+    exit 1
+    ;;
+esac
+
 echo "Installing Homebrew."
 sudo -v
 NONINTERACTIVE=1 /bin/bash -c \

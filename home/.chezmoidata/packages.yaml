@@ -1,14 +1,29 @@
 packages:
+  nix:
+    - git
+    - git-filter-repo
+    - tmux
+    - neovim
+    - fish
+    - fastfetch
+    - proton-pass-cli
+    - nodejs_24
+    - podman
+    # Neovim
+    - ripgrep
+    - fd
+    - lazygit
+    - fzf
+    - nixfmt
+    - statix
+    - ast-grep
+    - luarocks
+    - imagemagick
+    - ghostscript
+    - mermaid-cli
+    - tectonic
   darwin:
-    brews:
-      - fish
-      - git
-      - neovim
-      - tmux
+    brews: []
     casks: []
   linux:
-    apt:
-      - fish
-      - git
-      - neovim
-      - tmux
+    apt: []

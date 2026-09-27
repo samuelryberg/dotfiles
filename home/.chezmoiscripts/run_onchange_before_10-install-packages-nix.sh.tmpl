@@ -1,0 +1,57 @@
+{{ if or (eq .chezmoi.os "darwin") (eq .chezmoi.os "linux") -}}
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+packages=(
+{{ range .packages.nix -}}
+  {{ . | quote }}
+{{ end -}}
+)
+
+if ((${#packages[@]} == 0)); then
+  echo "No Nix packages are configured."
+  exit 0
+fi
+
+if [[ -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]]; then
+  # shellcheck disable=SC1091
+  source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+elif [[ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ]]; then
+  # shellcheck disable=SC1091
+  source "$HOME/.nix-profile/etc/profile.d/nix.sh"
+fi
+
+if ! command -v nix >/dev/null 2>&1; then
+  echo "Nix is not installed or is not available in PATH." >&2
+  exit 1
+fi
+
+nix_args=(--extra-experimental-features "nix-command flakes")
+installed_packages="$(nix "${nix_args[@]}" profile list 2>/dev/null || true)"
+missing_packages=()
+
+for package in "${packages[@]}"; do
+  if ! awk -v suffix=".$package" '
+    /^Flake attribute:/ {
+      attribute = $0
+      sub(/^Flake attribute:[[:space:]]*/, "", attribute)
+      if (length(attribute) >= length(suffix) \
+          && substr(attribute, length(attribute) - length(suffix) + 1) == suffix) {
+        found = 1
+      }
+    }
+    END { exit found ? 0 : 1 }
+  ' <<<"$installed_packages"; then
+    missing_packages+=("nixpkgs#$package")
+  fi
+done
+
+if ((${#missing_packages[@]} == 0)); then
+  echo "All Nix packages are already installed."
+  exit 0
+fi
+
+echo "Installing missing Nix packages: ${missing_packages[*]}"
+nix "${nix_args[@]}" profile install "${missing_packages[@]}"
+{{ end -}}

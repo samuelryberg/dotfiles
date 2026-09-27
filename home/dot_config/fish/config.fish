@@ -1,7 +1,3 @@
-# The following lines were added by Docker Desktop to add commands to your PATH.
-export PATH="$PATH:/Users/samuel/.docker/bin"
-# End of Docker Desktop section.
-
 if status is-interactive
     # Homebrew
     if test -x /opt/homebrew/bin/brew
