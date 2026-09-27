@@ -22,6 +22,15 @@ defaults write "$HOME/Library/Preferences/ByHost/com.apple.controlcenter" \
 # Global appearance
 defaults write -g AppleIconAppearanceTheme -string "ClearDark"
 
+# Mouse
+defaults write -g com.apple.mouse.linear -bool true
+defaults write -g com.apple.mouse.scaling -float 0.6875
+
+activate_settings=/System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings
+if [[ -x "$activate_settings" ]]; then
+  "$activate_settings" -u
+fi
+
 for process in Dock Finder ControlCenter SystemUIServer; do
   killall "$process" 2>/dev/null || true
 done
