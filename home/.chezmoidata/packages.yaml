@@ -24,6 +24,11 @@ packages:
     - tectonic
   darwin:
     brews: []
-    casks: []
+    casks:
+      - brave-browser
+      - ghostty
+      - localsend
+      - spotify
+      - obsidian
   linux:
     apt: []
