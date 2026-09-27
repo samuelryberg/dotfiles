@@ -5,21 +5,18 @@ set -euo pipefail
 
 username={{ .chezmoi.username | quote }}
 
-if command -v brew >/dev/null 2>&1; then
-  brew_bin="$(command -v brew)"
-elif [[ -x /opt/homebrew/bin/brew ]]; then
-  brew_bin=/opt/homebrew/bin/brew
-elif [[ -x /usr/local/bin/brew ]]; then
-  brew_bin=/usr/local/bin/brew
-else
-  echo "Homebrew is not installed." >&2
-  exit 1
+if [[ -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]]; then
+  # shellcheck disable=SC1091
+  source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+elif [[ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ]]; then
+  # shellcheck disable=SC1091
+  source "$HOME/.nix-profile/etc/profile.d/nix.sh"
 fi
 
-fish_path="$("$brew_bin" --prefix)/bin/fish"
+fish_path="$(command -v fish || true)"
 
-if [[ ! -x "$fish_path" ]]; then
-  echo "Homebrew's fish is not installed at $fish_path." >&2
+if [[ -z "$fish_path" || ! -x "$fish_path" ]]; then
+  echo "fish is not installed or is not available in PATH." >&2
   exit 1
 fi
 
@@ -35,6 +32,6 @@ if [[ "$current_shell" == "$fish_path" ]]; then
   exit 0
 fi
 
-echo "Setting Homebrew's fish as the login shell for $username."
+echo "Setting fish as the login shell for $username."
 sudo chsh -s "$fish_path" "$username"
 {{ end -}}

@@ -4,9 +4,18 @@
 set -euo pipefail
 
 username={{ .chezmoi.username | quote }}
+
+if [[ -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]]; then
+  # shellcheck disable=SC1091
+  source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+elif [[ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ]]; then
+  # shellcheck disable=SC1091
+  source "$HOME/.nix-profile/etc/profile.d/nix.sh"
+fi
+
 fish_path="$(command -v fish || true)"
 
-if [[ -z "$fish_path" ]]; then
+if [[ -z "$fish_path" || ! -x "$fish_path" ]]; then
   echo "fish is not installed or is not available in PATH." >&2
   exit 1
 fi
