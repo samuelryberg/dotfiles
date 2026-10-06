@@ -19,7 +19,7 @@ Package lists are defined in [`home/.chezmoidata/packages.yaml`](home/.chezmoida
 Install [chezmoi](https://www.chezmoi.io/install/), then initialize this repository:
 
 ```sh
-chezmoi init git@github.com:samuelryberg/dotfiles.git
+chezmoi init https://github.com:samuelryberg/dotfiles.git
 chezmoi diff
 chezmoi apply
 ```
